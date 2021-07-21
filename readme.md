@@ -39,10 +39,30 @@ const containsWords = sbot.search2.operator;
 sbot.db.query(
   where(containsWords('secure scuttlebutt')),
   toCallback((err, msgs) => {
-    console.log(msgs) // all messages containing "secure scuttlebutt"
+    console.log(msgs) // all messages containing "secure" or "scuttlebutt"
                       // inside `msg.value.content.text`
   })
 ),
+```
+
+"But I get wrong results! I get messages that have 'secure' somewhere and 'scuttlebutt' somewhere else, while in reality I really want 'secure scuttlebutt' together!"
+
+No problem! Just add a post-processing step that ensures the exact expression is together:
+
+```js
+pull(
+  sbot.db.query(
+     where(containsWords('secure scuttlebutt')),
+     toPullStream()
+   ),
+  pull.filter(
+    msg => msg.value.content.text.toLowerCase().includes('secure scuttlebutt')
+  ),
+  pull.collect((err, msgs) => {
+    console.log(msgs) // all messages containing exactly the expression
+                      // "secure scuttlebutt" inside `msg.value.content.text`
+  }),
+);
 ```
 
 ## License

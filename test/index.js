@@ -67,12 +67,7 @@ test('exact chain-of-words', (t) => {
 
   pull(
     sbot.db.query(where(containsWords(INPUT)), toPullStream()),
-    pull.filter(
-      (msg) =>
-        msg.value.content.text &&
-        typeof msg.value.content.text === 'string' &&
-        msg.value.content.text.toLowerCase().includes(INPUT),
-    ),
+    pull.filter((msg) => msg.value.content.text.toLowerCase().includes(INPUT)),
     pull.collect((err, msgs) => {
       t.error(err, 'no error');
       t.equals(msgs.length, 4, 'four posts');
