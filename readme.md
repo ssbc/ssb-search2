@@ -52,9 +52,9 @@ No problem! Just add a post-processing step that ensures the exact expression is
 ```js
 pull(
   sbot.db.query(
-     where(containsWords('secure scuttlebutt')),
-     toPullStream()
-   ),
+    where(containsWords('secure scuttlebutt')),
+    toPullStream()
+  ),
   pull.filter(
     msg => msg.value.content.text.toLowerCase().includes('secure scuttlebutt')
   ),
