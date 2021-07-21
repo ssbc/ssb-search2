@@ -54,7 +54,9 @@ class WordsIndex extends Plugin {
   }
 
   query(text: string, cb: CB<any>) {
-    const terms = [...text.matchAll(unicodeWordRegex)].map((a) => a[0]);
+    const terms = [...text.toLocaleLowerCase().matchAll(unicodeWordRegex)].map(
+      (result) => result[0],
+    );
 
     let drainers: Array<{abort: CallableFunction}>;
 
