@@ -1,6 +1,6 @@
 # ssb-search2
 
-> An SSB secret-stack plugin for \*_full-text search_ using ssb-db2
+> An SSB secret-stack plugin for **full-text search** using ssb-db2
 
 This is a similar to [ssb-search](https://github.com/ssbc/ssb-search), built with ssb-db2. The differences with ssb-search are:
 
@@ -55,12 +55,12 @@ pull(
     where(containsWords('secure scuttlebutt')),
     toPullStream()
   ),
-  pull.filter(
-    msg => msg.value.content.text.toLowerCase().includes('secure scuttlebutt')
+  pull.filter((msg) =>
+    msg.value.content.text.toLowerCase().includes('secure scuttlebutt'),
   ),
   pull.collect((err, msgs) => {
-    console.log(msgs) // all messages containing exactly the expression
-                      // "secure scuttlebutt" inside `msg.value.content.text`
+    console.log(msgs); // all messages containing exactly the expression
+                       // "secure scuttlebutt" inside `msg.value.content.text`
   }),
 );
 ```
