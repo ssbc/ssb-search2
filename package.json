@@ -6,7 +6,7 @@
     "type": "git",
     "url": "git+https://github.com/staltz/ssb-search2.git"
   },
-  "types": "types.ts",
+  "types": "lib/types.d.ts",
   "main": "lib/index.js",
   "author": "Andre Staltz <contact@staltz.com>",
   "license": "LGPL-3.0",
