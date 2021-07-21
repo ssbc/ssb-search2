@@ -1,0 +1,47 @@
+{
+  "name": "ssb-search2",
+  "version": "0.1.0",
+  "description": "Full-text search in SSB using ssb-db2",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/staltz/ssb-search2.git"
+  },
+  "types": "types.ts",
+  "main": "lib/index.js",
+  "author": "Andre Staltz <contact@staltz.com>",
+  "license": "LGPL-3.0",
+  "keywords": [
+    "ssb"
+  ],
+  "engines": {
+    "node": ">=12"
+  },
+  "dependencies": {
+    "bipf": "^1.5.1",
+    "pull-level": "^2.0.4",
+    "pull-stream": "^3.6.2"
+  },
+  "peerDependencies": {
+    "ssb-db2": ">=1.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^14.14.39",
+    "nyc": "^15.0.0",
+    "pull-stream-util": "^0.1.2",
+    "secret-stack": "6.4.0",
+    "ssb-caps": "^1.1.0",
+    "ssb-db2": "^2.1.4",
+    "ssb-fixtures": "^2.2.0",
+    "ssb-keys": "8.1.0",
+    "tap-bail": "^1.0.0",
+    "tap-spec": "^5.0.0",
+    "tape": "^5.2.0",
+    "typescript": "~4.3.5"
+  },
+  "scripts": {
+    "compile": "tsc",
+    "tape": "tape test/index.js | tap-bail | tap-spec",
+    "test": "npm run compile && npm run tape",
+    "coverage": "nyc --reporter=lcov npm test"
+  }
+}

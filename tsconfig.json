@@ -1,0 +1,22 @@
+{
+  "compilerOptions": {
+    "target": "es2019",
+    "module": "commonjs",
+    "lib": ["es5", "es2015", "es2016", "es2017", "es2018", "es2019", "es2020"],
+    "skipLibCheck": true,
+    "declaration": true,
+    "outDir": "./lib",
+    "rootDir": "./src",
+    "removeComments": true,
+    "strict": true,
+    "alwaysStrict": true,
+    "noUnusedLocals": false,
+    "noUnusedParameters": true,
+    "downlevelIteration": true,
+    "experimentalDecorators": true,
+    "noImplicitReturns": true,
+    "moduleResolution": "node",
+    "esModuleInterop": false
+  },
+  "exclude": ["node_modules", "test", "lib"]
+}
