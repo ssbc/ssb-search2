@@ -39,8 +39,8 @@ const containsWords = sbot.search2.operator;
 sbot.db.query(
   where(containsWords('secure scuttlebutt')),
   toCallback((err, msgs) => {
-    console.log(msgs) // all messages containing "secure" or "scuttlebutt"
-                      // inside `msg.value.content.text`
+    console.log(msgs) // all messages containing "secure" and "scuttlebutt"
+                      // somewhere inside `msg.value.content.text`
   })
 ),
 ```
