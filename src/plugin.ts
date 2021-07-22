@@ -7,7 +7,7 @@ const pull = require('pull-stream');
 const pl = require('pull-level');
 const Ref = require('ssb-ref');
 
-const B_1 = Buffer.from([1]);
+const B_0 = Buffer.alloc(0)
 const B_VALUE = Buffer.from('value');
 const B_CONTENT = Buffer.from('content');
 const B_TEXT = Buffer.from('text');
@@ -63,7 +63,7 @@ class WordsIndex extends Plugin {
       this.batch.push({
         type: 'put',
         key: [word, seq],
-        value: B_1,
+        value: B_0,
       });
     }
     uniqueLowercaseWords.clear();
