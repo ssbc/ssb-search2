@@ -1,4 +1,5 @@
 import {AAOLRecord, CB} from './types';
+import stopWords from './stop-words';
 const Plugin = require('ssb-db2/indexes/plugin');
 const {seqs} = require('ssb-db2/operators');
 const bipf = require('bipf');
@@ -38,9 +39,9 @@ class WordsIndex extends Plugin {
 
     const uniqueLowercaseWords = new Set<string>();
     for (const [word] of text.matchAll(unicodeWordRegex)) {
-      if (!exceptionsRegex.test(word)) {
-        uniqueLowercaseWords.add(word.toLocaleLowerCase());
-      }
+      if (exceptionsRegex.test(word)) continue;
+      if (stopWords['en'].includes(word.toLocaleLowerCase())) continue;
+      uniqueLowercaseWords.add(word.toLocaleLowerCase());
     }
 
     for (const word of uniqueLowercaseWords) {
