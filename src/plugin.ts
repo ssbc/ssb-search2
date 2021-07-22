@@ -1,6 +1,5 @@
 import {AAOLRecord, CB} from './types';
 import stopWords from './stop-words';
-const stripMarkdownOneline = require('strip-markdown-oneline');
 const Plugin = require('ssb-db2/indexes/plugin');
 const {seqs} = require('ssb-db2/operators');
 const bipf = require('bipf');
@@ -46,7 +45,6 @@ class WordsIndex extends Plugin {
   processRecord(record: AAOLRecord, seq: number) {
     let text = findValueContentText(record.value);
     if (!text) return;
-    text = stripMarkdownOneline(text) as string;
     text = text.replace(feedIdRegex, '');
     text = text.replace(msgIdRegex, '');
     text = text.replace(blobIdRegex, '');
