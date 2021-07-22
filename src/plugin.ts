@@ -6,6 +6,7 @@ const {seqs} = require('ssb-db2/operators');
 const bipf = require('bipf');
 const pull = require('pull-stream');
 const pl = require('pull-level');
+const Ref = require('ssb-ref');
 
 const B_1 = Buffer.from([1]);
 const B_VALUE = Buffer.from('value');
@@ -14,6 +15,9 @@ const B_TEXT = Buffer.from('text');
 
 const exceptionsRegex = /^[a-z]{1,2}$/u; // lowercase 1-or-2 ascii characters
 const unicodeWordRegex = /\p{L}+/giu;
+const msgIdRegex = new RegExp(Ref.msgIdRegex.source.slice(1, -1), 'g');
+const blobIdRegex = new RegExp(Ref.blobIdRegex.source.slice(1, -1), 'g');
+const feedIdRegex = new RegExp(Ref.feedIdRegex.source.slice(1, -1), 'g');
 
 function findValueContentText(buf: Buffer): string | undefined {
   let p = 0;
@@ -38,6 +42,9 @@ class WordsIndex extends Plugin {
     let text = findValueContentText(record.value);
     if (!text) return;
     text = stripMarkdownOneline(text) as string;
+    text = text.replace(feedIdRegex, '');
+    text = text.replace(msgIdRegex, '');
+    text = text.replace(blobIdRegex, '');
 
     const uniqueLowercaseWords = new Set<string>();
     for (const [word] of text.matchAll(unicodeWordRegex)) {
