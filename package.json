@@ -19,7 +19,8 @@
   "dependencies": {
     "bipf": "^1.5.1",
     "pull-level": "^2.0.4",
-    "pull-stream": "^3.6.2"
+    "pull-stream": "^3.6.2",
+    "strip-markdown-oneline": "^1.0.3"
   },
   "peerDependencies": {
     "ssb-db2": ">=1.0.0"
