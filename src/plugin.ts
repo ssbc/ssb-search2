@@ -19,6 +19,8 @@ const unicodeWordRegex = /\p{L}+/giu;
 const msgIdRegex = new RegExp(Ref.msgIdRegex.source.slice(1, -1), 'g');
 const blobIdRegex = new RegExp(Ref.blobIdRegex.source.slice(1, -1), 'g');
 const feedIdRegex = new RegExp(Ref.feedIdRegex.source.slice(1, -1), 'g');
+const localhostUrlRegex =
+  /https?:\/\/(?:localhost|127\.0\.0\.1)(?::\d+)?(?:[/?#][^\s"]*)?/g;
 const urlRegex =
   /https?:\/\/(?:[a-zA-Z]*[-.]*[a-zA-Z0-9]*\.)?([a-zA-Z0-9]+)\.[a-zA-Z]{2,}(?:[/?#][^\s"]*)?/g;
 
@@ -48,6 +50,7 @@ class WordsIndex extends Plugin {
     text = text.replace(feedIdRegex, '');
     text = text.replace(msgIdRegex, '');
     text = text.replace(blobIdRegex, '');
+    text = text.replace(localhostUrlRegex, '');
     text = text.replace(urlRegex, '$1'); // keep the domain, e.g. `github`
 
     const uniqueLowercaseWords = new Set<string>();
