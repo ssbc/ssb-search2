@@ -13,7 +13,8 @@ const B_VALUE = Buffer.from('value');
 const B_CONTENT = Buffer.from('content');
 const B_TEXT = Buffer.from('text');
 
-const exceptionsRegex = /^[a-z]{1,2}$/u; // lowercase 1-or-2 ascii characters
+const oneAsciiRegex = /^[a-zA-Z]{1}$/u; // 1-char ascii
+const twoLowerCaseAsciiRegex = /^[a-z]{2}$/u; // lowercase 2-char ascii
 const unicodeWordRegex = /\p{L}+/giu;
 const msgIdRegex = new RegExp(Ref.msgIdRegex.source.slice(1, -1), 'g');
 const blobIdRegex = new RegExp(Ref.blobIdRegex.source.slice(1, -1), 'g');
@@ -51,7 +52,8 @@ class WordsIndex extends Plugin {
 
     const uniqueLowercaseWords = new Set<string>();
     for (const [word] of text.matchAll(unicodeWordRegex)) {
-      if (exceptionsRegex.test(word)) continue;
+      if (oneAsciiRegex.test(word)) continue;
+      if (twoLowerCaseAsciiRegex.test(word)) continue;
       if (stopWords['en'].includes(word.toLocaleLowerCase())) continue;
       uniqueLowercaseWords.add(word.toLocaleLowerCase());
     }
