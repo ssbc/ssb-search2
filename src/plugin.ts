@@ -13,8 +13,8 @@ const B_VALUE = Buffer.from('value');
 const B_CONTENT = Buffer.from('content');
 const B_TEXT = Buffer.from('text');
 
-const oneAsciiRegex = /^[a-zA-Z]{1}$/u; // 1-char ascii
-const twoLowerCaseAsciiRegex = /^[a-z]{2}$/u; // lowercase 2-char ascii
+const oneAsciiRegex = /^[a-zA-Z]{1}$/; // 1-char ascii
+const twoLowerCaseAsciiRegex = /^[a-z]{2}$/; // lowercase 2-char ascii
 const unicodeWordRegex = getUnicodeWordRegex();
 const msgIdRegex = new RegExp(Ref.msgIdRegex.source.slice(1, -1), 'g');
 const blobIdRegex = new RegExp(Ref.blobIdRegex.source.slice(1, -1), 'g');
