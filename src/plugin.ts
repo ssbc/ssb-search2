@@ -1,4 +1,4 @@
-import {AAOLRecord, CB} from './types';
+import {AAOLRecord, AddListener, CB} from './types';
 import stopWords from './stop-words';
 const Plugin = require('ssb-db2/indexes/plugin');
 const {seqs} = require('ssb-db2/operators');
@@ -70,18 +70,16 @@ class WordsIndex extends Plugin {
     uniqueLowercaseWords.clear();
   }
 
-  query(text: string, cb: CB<any>) {
+  query(text: string, cb: CB<any>, onAbort: AddListener) {
     const terms = [...text.toLocaleLowerCase().matchAll(unicodeWordRegex)].map(
       (result) => result[0],
     );
 
     let drainers: Array<{abort: CallableFunction}>;
 
-    // TODO: use this `abort` function when
-    // https://github.com/ssb-ngi-pointer/jitdb/issues/163 is fixed
-    const abort = () => {
+    onAbort(() => {
       while (drainers && drainers.length) drainers.shift()?.abort();
-    };
+    });
 
     const HIT_ALL = 2 ** terms.length - 1; // bit mask of all "hit" terms
     const hitsFor = new Map<number, number>();

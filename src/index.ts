@@ -1,6 +1,6 @@
 const {deferred} = require('ssb-db2/operators');
-const WordsIndex = require('./plugin');
-import {CB, SSB} from './types';
+import WordsIndex = require('./plugin');
+import {AddListener, CB, SSB} from './types';
 
 export = {
   name: 'search2',
@@ -9,9 +9,10 @@ export = {
 
     return {
       operator(text: string) {
-        return deferred((meta: any, cb: CB<any>) => {
+        return deferred((meta: any, cb: CB<any>, onAbort: AddListener) => {
           meta.db.onDrain('search2', () => {
-            meta.db.getIndex('search2').query(text, cb);
+            const plugin = meta.db.getIndex('search2') as WordsIndex;
+            plugin.query(text, cb, onAbort);
           });
         });
       },
