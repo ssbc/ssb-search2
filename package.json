@@ -9,8 +9,8 @@
   "types": "lib/types.d.ts",
   "main": "lib/index.js",
   "files": [
-    "*.js",
-    "*.d.ts"
+    "lib/*.js",
+    "lib/*.d.ts"
   ],
   "author": "Andre Staltz <contact@staltz.com>",
   "license": "LGPL-3.0",
