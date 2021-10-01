@@ -1,9 +1,0 @@
-/node_modules
-/coverage
-/.github
-/.nyc_output
-/src
-/test
-/tools
-pnpm-lock.yaml
-tsconfig.json
