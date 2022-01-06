@@ -6,7 +6,7 @@ const bipf = require('bipf');
 const pull = require('pull-stream');
 const pl = require('pull-level');
 const Ref = require('ssb-ref');
-import {getUnicodeWordRegex} from './unicode-word-regex';
+const getUnicodeWordRegex = require('unicode-word-regex');
 
 const B_0 = Buffer.alloc(0);
 const B_VALUE = Buffer.from('value');
