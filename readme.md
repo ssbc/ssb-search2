@@ -18,7 +18,7 @@ npm install ssb-search2
 
 - Requires **Node.js 12** or higher
 - Requires `secret-stack@^6.2.0`
-- Requires `ssb-db2@>=2.3.0`
+- Requires `ssb-db2@>=2.4.0`
 
 ```diff
  SecretStack({appKey: require('ssb-caps').shs})
