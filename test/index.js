@@ -6,7 +6,6 @@ const SecretStack = require('secret-stack');
 const caps = require('ssb-caps');
 const ssbKeys = require('ssb-keys');
 const pull = require('pull-stream');
-const fromEvent = require('pull-stream-util/from-event');
 const {where, toPullStream} = require('ssb-db2/operators');
 
 const dir = '/tmp/ssb-search2';
@@ -38,7 +37,7 @@ test('generate fixture', (t) => {
       .call(null, {keys, path: dir, db2: {automigrate: true}});
 
     pull(
-      fromEvent('ssb:db2:migrate:progress', sbot),
+      sbot.db2migrate.progress(),
       pull.filter((progress) => progress === 1),
       pull.take(1),
       pull.drain(() => {
