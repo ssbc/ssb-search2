@@ -9,7 +9,6 @@ const Ref = require('ssb-ref');
 const getUnicodeWordRegex = require('unicode-word-regex');
 
 const B_0 = Buffer.alloc(0);
-const B_VALUE = Buffer.from('value');
 const B_CONTENT = Buffer.from('content');
 const B_TEXT = Buffer.from('text');
 
@@ -24,15 +23,12 @@ const localhostUrlRegex =
 const urlRegex =
   /https?:\/\/(?:[a-zA-Z]*[-.]*[a-zA-Z0-9]*\.)?([a-zA-Z0-9]+)\.[a-zA-Z]{2,}(?:[/?#][^\s"]*)?/g;
 
-function findValueContentText(buf: Buffer): string | undefined {
-  let p = 0;
-  p = bipf.seekKey(buf, p, B_VALUE);
-  if (p < 0) return;
-  p = bipf.seekKey(buf, p, B_CONTENT);
-  if (p < 0) return;
-  p = bipf.seekKey(buf, p, B_TEXT);
-  if (p < 0) return;
-  const text = bipf.decode(buf, p);
+function findValueContentText(buf: Buffer, pValue: number): string | undefined {
+  const pValueContent = bipf.seekKey(buf, pValue, B_CONTENT);
+  if (pValueContent < 0) return;
+  const pValueContentText = bipf.seekKey(buf, pValueContent, B_TEXT);
+  if (pValueContentText < 0) return;
+  const text = bipf.decode(buf, pValueContentText);
   if (typeof text !== 'string') return;
   if (!text) return;
   return text;
@@ -43,8 +39,8 @@ class WordsIndex extends Plugin {
     super(log, dir, 'search2', 1, 'json', 'binary');
   }
 
-  processRecord(record: AAOLRecord, seq: number) {
-    let text = findValueContentText(record.value);
+  processRecord(record: AAOLRecord, seq: number, pValue: number) {
+    let text = findValueContentText(record.value, pValue);
     if (!text) return;
     text = text.replace(feedIdRegex, '');
     text = text.replace(msgIdRegex, '');

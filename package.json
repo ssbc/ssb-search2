@@ -39,7 +39,7 @@
     "regenerate": "^1.4.2",
     "secret-stack": "6.4.0",
     "ssb-caps": "^1.1.0",
-    "ssb-db2": "^2.1.4",
+    "ssb-db2": "^3.4.1",
     "ssb-fixtures": "^2.2.0",
     "ssb-keys": "8.1.0",
     "tap-bail": "^1.0.0",
