@@ -81,7 +81,7 @@ function findMsgText(buf: Buffer, pValue: number): string {
 
 class WordsIndex extends Plugin {
   constructor(log: any, dir: any) {
-    super(log, dir, 'search2', 1, 'json', 'binary');
+    super(log, dir, 'search2', 2, 'json', 'binary');
   }
 
   processRecord(record: AAOLRecord, seq: number, pValue: number) {
