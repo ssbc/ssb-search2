@@ -1,6 +1,6 @@
 {
   "name": "ssb-search2",
-  "version": "2.1.2",
+  "version": "2.1.3",
   "description": "Full-text search in SSB using ssb-db2",
   "repository": {
     "type": "git",
