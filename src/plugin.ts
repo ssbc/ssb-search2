@@ -9,8 +9,12 @@ const Ref = require('ssb-ref');
 const getUnicodeWordRegex = require('unicode-word-regex');
 
 const B_0 = Buffer.alloc(0);
-const B_CONTENT = Buffer.from('content');
-const B_TEXT = Buffer.from('text');
+const BIPF_CONTENT = bipf.allocAndEncode('content');
+const BIPF_TYPE = bipf.allocAndEncode('type');
+const BIPF_TEXT = bipf.allocAndEncode('text');
+const BIPF_START_DATE_TIME = bipf.allocAndEncode('startDateTime');
+const BIPF_TITLE = bipf.allocAndEncode('title');
+const BIPF_DESCRIPTION = bipf.allocAndEncode('description');
 
 const oneAsciiRegex = /^[a-zA-Z]{1}$/; // 1-char ascii
 const twoLowerCaseAsciiRegex = /^[a-z]{2}$/; // lowercase 2-char ascii
@@ -23,15 +27,56 @@ const localhostUrlRegex =
 const urlRegex =
   /https?:\/\/(?:[a-zA-Z]*[-.]*[a-zA-Z0-9]*\.)?([a-zA-Z0-9]+)\.[a-zA-Z]{2,}(?:[/?#][^\s"]*)?/g;
 
-function findValueContentText(buf: Buffer, pValue: number): string | undefined {
-  const pValueContent = bipf.seekKey(buf, pValue, B_CONTENT);
-  if (pValueContent < 0) return;
-  const pValueContentText = bipf.seekKey(buf, pValueContent, B_TEXT);
-  if (pValueContentText < 0) return;
+function getPostText(buf: Buffer, pValueContent: number): string {
+  const pValueContentText = bipf.seekKey2(buf, pValueContent, BIPF_TEXT, 0);
+  if (pValueContentText < 0) return '';
   const text = bipf.decode(buf, pValueContentText);
-  if (typeof text !== 'string') return;
-  if (!text) return;
+  if (typeof text !== 'string') return '';
+  if (!text) return '';
   return text;
+}
+
+function hasStartdatetime(buf: Buffer, pValueContent: number): boolean {
+  const pValueContentStartdatetime = bipf.seekKey2(
+    buf,
+    pValueContent,
+    BIPF_START_DATE_TIME,
+    0,
+  );
+  return pValueContentStartdatetime >= 0;
+}
+
+function getGatheringText(buf: Buffer, pValueContent: number): string {
+  const pValueContentTitle = bipf.seekKey2(buf, pValueContent, BIPF_TITLE, 0);
+  const pValueContentDescription = bipf.seekKey2(
+    buf,
+    pValueContent,
+    BIPF_DESCRIPTION,
+    0,
+  );
+  if (pValueContentTitle < 0 && pValueContentDescription < 0) return '';
+  const title =
+    pValueContentTitle >= 0 ? bipf.decode(buf, pValueContentTitle) : '';
+  const description =
+    pValueContentDescription >= 0
+      ? bipf.decode(buf, pValueContentDescription)
+      : '';
+  return title + ' ' + description;
+}
+
+function findMsgText(buf: Buffer, pValue: number): string {
+  const pValueContent = bipf.seekKey2(buf, pValue, BIPF_CONTENT, 0);
+  if (pValueContent < 0) return '';
+  const pValueContentType = bipf.seekKey2(buf, pValueContent, BIPF_TYPE, 0);
+  if (pValueContentType < 0) return '';
+  const type = bipf.decode(buf, pValueContentType);
+  if (type === 'post') {
+    return getPostText(buf, pValueContent);
+  } else if (type === 'about' && hasStartdatetime(buf, pValueContent)) {
+    return getGatheringText(buf, pValueContent);
+  } else {
+    return '';
+  }
 }
 
 class WordsIndex extends Plugin {
@@ -40,7 +85,7 @@ class WordsIndex extends Plugin {
   }
 
   processRecord(record: AAOLRecord, seq: number, pValue: number) {
-    let text = findValueContentText(record.value, pValue);
+    let text = findMsgText(record.value, pValue);
     if (!text) return;
     text = text.replace(feedIdRegex, '');
     text = text.replace(msgIdRegex, '');
