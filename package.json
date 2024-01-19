@@ -24,7 +24,7 @@
     "bipf": "^1.5.1",
     "pull-level": "^2.0.4",
     "pull-stream": "^3.6.2",
-    "ssb-ref": ">=2.13.0",
+    "ssb-ref": "^2.16.0",
     "unicode-word-regex": "^1.0.1"
   },
   "peerDependencies": {
@@ -39,7 +39,7 @@
     "regenerate": "^1.4.2",
     "secret-stack": "6.4.0",
     "ssb-caps": "^1.1.0",
-    "ssb-db2": "^3.4.1",
+    "ssb-db2": "^5.0.0",
     "ssb-fixtures": "^2.2.0",
     "ssb-keys": "8.1.0",
     "tap-bail": "^1.0.0",
