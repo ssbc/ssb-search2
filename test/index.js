@@ -94,7 +94,9 @@ test('word prefix', (t) => {
       t.equals(matches.length, 3, '3 matches');
       const matchPositions = matches.map((m) => m.index);
       t.deepEquals(matchPositions, [47, 55, 168], 'labo positions found');
-      sbot.close(true, t.end);
+      setTimeout(()=> {
+        sbot.close(true, t.end);
+      },1000)
     }),
   );
 });
