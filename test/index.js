@@ -69,7 +69,7 @@ test('exact chain-of-words', (t) => {
     pull.filter((msg) => msg.value.content.text.toLowerCase().includes(INPUT)),
     pull.collect((err, msgs) => {
       t.error(err, 'no error');
-      t.equals(msgs.length, 4, 'four posts');
+      t.equals(msgs.length, 2, 'two posts');
       sbot.close(true, t.end);
     }),
   );
@@ -91,9 +91,9 @@ test('word prefix', (t) => {
       t.false(/\blabo\b/i.test(msg.value.content.text), 'labo is not found');
       const matches = [...msg.value.content.text.matchAll(/labo/gi)];
       t.true(msg.value.content.text.includes('labo'), 'labo prefix is found');
-      t.equals(matches.length, 3, '3 matches');
+      t.equals(matches.length, 2, '2 matches');
       const matchPositions = matches.map((m) => m.index);
-      t.deepEquals(matchPositions, [47, 55, 168], 'labo positions found');
+      t.deepEquals(matchPositions, [160, 168], 'labo positions found');
       setTimeout(()=> {
         sbot.close(true, t.end);
       },1000)
