@@ -22,6 +22,36 @@ test('generate fixture', (t) => {
     return;
   }
 
+  let keys
+
+  // for testing searching custom locations
+  function postComplicated() {
+    const sbot = SecretStack({appKey: caps.shs})
+      .use(require('ssb-db2'))
+      .call(null, {keys, path: dir});
+
+    sbot.db.create({
+      content: {
+        preferredName: {
+          set: 'potato'
+        },
+        legalName: {
+          set: 'asdf'
+        },
+        altNames: {
+          'john': 1,
+          'johan': -1,
+        }
+      }
+    }, (err) => {
+      if (err) t.fail(err)
+
+      sbot.db.onDrain('search', () => {
+        sbot.close(true, t.end);
+      });
+    })
+  }
+
   generateFixture({
     outputDir: dir,
     seed: SEED,
@@ -31,10 +61,13 @@ test('generate fixture', (t) => {
   }).then(() => {
     t.true(fs.existsSync(oldLogPath), 'fixture was created');
 
-    const keys = ssbKeys.loadOrCreateSync(path.join(dir, 'secret'));
+    keys = ssbKeys.loadOrCreateSync(path.join(dir, 'secret'));
     const sbot = SecretStack({appKey: caps.shs})
       .use(require('ssb-db2'))
-      .call(null, {keys, path: dir, db2: {automigrate: true}});
+      .call(null, {keys, path: dir, db2: {
+        automigrate: true,
+        dangerouslyKillFlumeWhenMigrated: true
+      }});
 
     pull(
       sbot.db2migrate.progress(),
@@ -44,9 +77,30 @@ test('generate fixture', (t) => {
         setTimeout(() => {
           t.true(fs.existsSync(newLogPath), 'ssb-db2 migration completed');
 
-          sbot.db.onDrain('search', () => {
-            sbot.close(true, t.end);
-          });
+          sbot.db.create({
+            content: {
+              type: 'test',
+              preferredName: {
+                set: 'potato'
+              },
+              legalName: {
+                set: 'asdf'
+              },
+              altNames: {
+                'john': 1,
+                'johan': -1,
+              }
+            }
+          }, (err) => {
+            if (err) {
+              console.error('create failed', err)
+              t.fail(err)
+            }
+
+            sbot.db.onDrain('search', () => {
+              sbot.close(true, t.end);
+            });
+          })
         }, 1000);
       }),
     );
